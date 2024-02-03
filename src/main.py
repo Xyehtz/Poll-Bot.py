@@ -1,5 +1,6 @@
 import os
 import discord
+import logging
 from dotenv import load_dotenv
 
 # Import the .env file with the credentials
@@ -8,26 +9,26 @@ dotenv_path = r'dotfiles/.env'
 os.environ['DOTENV_PATH'] = dotenv_path
 load_dotenv(dotenv_path)
 
+# Logging discord info
+logger = logging.getLogger('discord')
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
+
 # Declaration of intents
 intents = discord.Intents.default()
 intents.message_content = True
 
-# Creation of Discord Client
-client = discord.Client(intents=intents)
+# Creation of Discord bot
+bot = discord.Bot(intents=intents)
 
-# Login event
-@client.event
-async def on_ready():
-  print(f'Logged in as {client.user}')
 
-# Message event
-@client.event
-async def on_message(message):
-  print(f'Message from {message.author}: {message.content}')
-  if message.author == client.user:
-    return
-  
-  if message.content.lower().startswith('hello'):
-    await message.channel.send('Hello!')
+# Load commands inside of cogs folder
+cog_list = [file[:-3] for file in os.listdir(r'src/cogs') if file.endswith('.py')]
 
-client.run(os.getenv('TOKEN'))
+for cog in cog_list:
+  bot.load_extension(f'cogs.{cog}')
+  print(f'Loaded {cog}')
+
+bot.run(os.getenv('TOKEN'))
