@@ -3,3 +3,5 @@
   username = Xyehtz
 [init]
   defaultBranch = master
+[color]
+  ui = auto
