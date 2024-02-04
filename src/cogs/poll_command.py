@@ -12,13 +12,23 @@ class Button(commands.Cog):
     self.bot = bot
 
   class MyView(discord.ui.View):
+    def __init__(self, options):
+      super().__init__()
+      self.options = options
+
     @discord.ui.button(label='Button 1', style=discord.ButtonStyle.blurple)
     async def button_callback(self, button, interaction):
-      await interaction.response.send_message(f'You clicked me', ephemeral=True)
+      await interaction.response.send_message(f'You clicked {self.options}', ephemeral=True)
 
   @discord.slash_command(guild_ids=[os.getenv('GUILD_ID')], name='poll', description='Create a poll')
-  async def button(self, ctx, text: discord.Option(str), first_option: discord.Option(discord.User), second_option: discord.Option(discord.Member)):
-    await ctx.respond(f'{text}\n<@{first_option.id}>\n<@{second_option.id}>', view=Button.MyView())
+  async def button(
+    self, 
+    ctx, 
+    text: discord.Option(str), 
+    first_option: discord.Option(discord.User), 
+    second_option: discord.Option(discord.Member)
+  ):
+    await ctx.respond(f'{text}\n<@{first_option.id}>\n<@{second_option.id}>', view=Button.MyView(options=first_option))
 
 def setup(bot):
   bot.add_cog(Button(bot))
