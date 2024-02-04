@@ -2,6 +2,7 @@ import os
 import discord
 import logging
 from dotenv import load_dotenv
+from discord.ext import commands
 
 # Import the .env file with the credentials
 # ? Note to self: For some reason sometimes the path will not work properly, if so just copy the relative path from the code editor
