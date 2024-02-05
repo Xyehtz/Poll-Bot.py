@@ -6,7 +6,7 @@ from discord.ext import commands
 
 # Import the .env file with the credentials
 # ? Note to self: For some reason sometimes the path will not work properly, if so just copy the relative path from the code editor
-dotenv_path = r'dotfiles/.env'
+dotenv_path = r'secrets/.env'
 os.environ['DOTENV_PATH'] = dotenv_path
 load_dotenv(dotenv_path)
 
